@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js"></script>
+	<script src="pop_voyage.js"></script>
+	<script src="main.js"></script>
+	<link rel="stylesheet" href="main.css" media="screen">
+	<link rel="stylesheet" href="pop_voyage.css" media="screen">
+	<title>Seda's Runescape Information</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
+<div class="grid-container">
+	
+	<div class="header">
+		<H1>Player-owned Ports</H1>
+	</div>
+	
+	<div class="sidenav">
+		<a href="Collection_Logs/Collection Logs.html">Collection Logs</a>
+		<a href="Potions/potions.html">Potions</a>
+		<a href="#">Link3</a>
+		<a href="#">Link4</a>
+		<a href="#">Link5</a>
+		<a href="Potions/potions.html">Potion Finder</a>
+	</div>
+	
+	<div class="content">
+		<div id="voyage"></div>
+		<table style="width:90%">
+			<tr>
+				<th colspan="4">Player-owned Ports Voyage Calculator</th>
+			</tr>
+			<tr>
+				<td style="text-align:right; width:155px;">
+					<div style="width:98%;">
+						Ration Pack: <select class="effectBonus" id="bonusMorale"><option value="0">0%</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option></select><br />
+						Powder Keg: <select class="effectBonus" id="bonusCombat"><option value="0">0%</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option></select><br />
+						Bottled Cry: <select class="effectBonus" id="bonusSeafaring"><option value="0">0%</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option></select>
+					</div>
+				</td>
+				<td style="text-align:right;">
+					<div style="width:98%;">
+						Morale Target: <input type="text" name="morale" id="morale" class="target-number"><br />
+						Combat Target: <input type="text" name="combat" id="combat" class="target-number"><br />
+						Seafaring Target: <input type="text" name="seafaring" id="seafaring" class="target-number">
+					</div>
+				</td>
+				<td style="vertical-align:bottom; text-align:right;">
+					Chance of Success:<br />
+					Morale:<br />
+					Combat:<br />
+					Seafaring:
+				</td>
+				<td style="vertical-align:bottom; text-align:left;">
+					<span id="chance">0</span>%<br />
+					<span id="finalm">0</span><br />
+					<span id="finalc">0</span><br />
+					<span id="finals">0</span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="text-align:right; width:55%;">
+					<div style="width:80%">Use Minimum Crew on 100% Voyages: <input type="checkbox" id="minCrew" />
+					</div>
+				</td>
+				<td colspan="2"><span id="calcMessage" style="display:none;">Calculating...</span>
+					<input id="calcButton" type="submit" value="Calculate" onclick="javascript:calculate();">
+				</td>
+			</tr>
+		</table>
+		<form name="shipwrightform">
+			<table style="width:90%">
+				<tr>
+					<td style="text-align:left; width: 20%;">Shipwright Upgrades:</td>
+					<td><select name="shipwright" id="shipwright">
+						<option value="1">Dilapidated</option>
+						<option value="2">Refitted</option>
+						<option value="3">Renovated</option>
+						<option value="4">Nautical</option>
+						<option value="5">Warship</option>
+						<option value="6">Luxurious</option>
+						<option value="7">Sleek</option>
+						<option value="8">Ostentatious </option>
+						<option value="9">Battleship</option>
+						<option value="10">Maritime</option>
+					</select></td>
+				</tr>
+			</table>
+		</form><br />
+
+		
+		<div id="ship"></div>
+		<table style="width:90%">
+			<tr>
+				<th colspan="2">Unlocked Ship Upgrades</th>
+				<th><input type="checkbox" id="hideupgrades" />Hide unused</th>
+			</tr>
+			<tr>
+				<th>Rams / Figureheads <input type="checkbox" id="ramstoggle"/><label for="ramstoggle">All</label><br/></th>
+				<th>Deck Items <input type="checkbox" id="deckstoggle"/><label for="deckstoggle">All</label></th>
+				<th>Hulls <input type="checkbox" id="hullstoggle"/><label for="hullstoggle">All</label></th>
+			</tr>
+			<tr style="vertical-align:top;">
+				<td style="text-align: left;">
+					<form name="ramsform" style="margin-top: 2px;">
+						<span id="spanram0"><input type="checkbox" name="ram" value="0" id="ram0"><label for="ram0" id="labelram0">Weathered Ram</label><br /></span>
+						<span id="spanram1"><input type="checkbox" name="ram" value="1" id="ram1"><label for="ram1" id="labelram1">Polished Figurehead</label><br /></span>
+						<span id="spanram2"><input type="checkbox" name="ram" value="2" id="ram2"><label for="ram2" id="labelram2">Sturdy Ram</label><br /></span>
+						<span id="spanram3"><input type="checkbox" name="ram" value="3" id="ram3"><label for="ram3" id="labelram3">Enchanted Figurehead</label><br /></span>
+						<span id="spanram4"><input type="checkbox" name="ram" value="4" id="ram4"><label for="ram4" id="labelram4">Reinforced Ram</label><br /></span>
+						<span id="spanram5"><input type="checkbox" name="ram" value="5" id="ram5"><label for="ram5" id="labelram5">Skeletal Figurehead</label><br /></span>
+						<span id="spanram6"><input type="checkbox" name="ram" value="6" id="ram6"><label for="ram6" id="labelram6">Armoured Ram</label><br /></span>
+						<span id="spanram7"><input type="checkbox" name="ram" value="7" id="ram7"><label for="ram7" id="labelram7">Ghostly Figurehead</label><br /></span>
+						<span id="spanram8"><input type="checkbox" name="ram" value="8" id="ram8"><label for="ram8" id="labelram8">Battle Ram</label><br /></span>
+						<span id="spanram9"><input type="checkbox" name="ram" value="9" id="ram9"><label for="ram9" id="labelram9">Intrepid Figurehead</label><br /></span>
+						<span id="spanram10"><input type="checkbox" name="ram" value="10" id="ram10"><label for="ram10" id="labelram10">War Ram</label><br /></span>
+						<span id="spanram11"><input type="checkbox" name="ram" value="11" id="ram11"><label for="ram11" id="labelram11">Inspiring Figurehead</label><br /></span>
+						<span id="spanram12"><input type="checkbox" name="ram" value="12" id="ram12"><label for="ram12" id="labelram12">Spitfire Cannon</label><br /></span>
+						<span id="spanram13"><input type="checkbox" name="ram" value="13" id="ram13"><label for="ram13" id="labelram13">Figurehead of the Spires</label><br /></span>
+						<span id="spanram14"><input type="checkbox" name="ram" value="14" id="ram14"><label for="ram14" id="labelram14">Ram of the Bladewing</label><br /></span>
+					</form>
+				</td>
+				<td style="text-align: left;">
+					<form name="decksform" style="margin-top: 2px;">
+						<span id="spandeck0"><input type="checkbox" name="deck" value="0" id="deck0"><label for="deck0" id="labeldeck0">Weathered rigging</label><br /></span>
+						<span id="spandeck1"><input type="checkbox" name="deck" value="1" id="deck1"><label for="deck1" id="labeldeck1">Small crate of food</label><br /></span>
+						<span id="spandeck2"><input type="checkbox" name="deck" value="2" id="deck2"><label for="deck2" id="labeldeck2">Sturdy rigging</label><br /></span>
+						<span id="spandeck3"><input type="checkbox" name="deck" value="3" id="deck3"><label for="deck3" id="labeldeck3">Large crate of food</label><br /></span>
+						<span id="spandeck4"><input type="checkbox" name="deck" value="4" id="deck4"><label for="deck4" id="labeldeck4">Single cannon</label><br /></span>
+						<span id="spandeck5"><input type="checkbox" name="deck" value="5" id="deck5"><label for="deck5" id="labeldeck5">Entwined rigging</label><br /></span>
+						<span id="spandeck6"><input type="checkbox" name="deck" value="6" id="deck6"><label for="deck6" id="labeldeck6">Small crate of riches</label><br /></span>
+						<span id="spandeck7"><input type="checkbox" name="deck" value="7" id="deck7"><label for="deck7" id="labeldeck7">Cannon x2</label><br /></span>
+						<span id="spandeck8"><input type="checkbox" name="deck" value="8" id="deck8"><label for="deck8" id="labeldeck8">Oxskin rigging</label><br /></span>
+						<span id="spandeck9"><input type="checkbox" name="deck" value="9" id="deck9"><label for="deck9" id="labeldeck9">Large crate of riches</label><br /></span>
+						<span id="spandeck10"><input type="checkbox" name="deck" value="10" id="deck10"><label for="deck10" id="labeldeck10">Heavy cannon x2</label><br /></span>
+						<span id="spandeck11"><input type="checkbox" name="deck" value="11" id="deck11"><label for="deck11" id="labeldeck11">Ornate rigging</label><br /></span>
+						<span id="spandeck12"><input type="checkbox" name="deck" value="12" id="deck12"><label for="deck12" id="labeldeck12">Eastern artefacts</label><br /></span>
+						<span id="spandeck13"><input type="checkbox" name="deck" value="13" id="deck13"><label for="deck13" id="labeldeck13">Cannon x3</label><br /></span>
+						<span id="spandeck14"><input type="checkbox" name="deck" value="14" id="deck14"><label for="deck14" id="labeldeck14">Whaleskin rigging</label><br /></span>
+						<span id="spandeck15"><input type="checkbox" name="deck" value="15" id="deck15"><label for="deck15" id="labeldeck15">Eastern treasures</label><br /></span>
+						<span id="spandeck16"><input type="checkbox" name="deck" value="16" id="deck16"><label for="deck16" id="labeldeck16">Cannon x4</label><br /></span>
+						<span id="spandeck17"><input type="checkbox" name="deck" value="17" id="deck17"><label for="deck17" id="labeldeck17">Dragonskin rigging</label><br /></span>
+						<span id="spandeck18"><input type="checkbox" name="deck" value="18" id="deck18"><label for="deck18" id="labeldeck18">Eastern relics</label><br /></span>
+						<span id="spandeck19"><input type="checkbox" name="deck" value="19" id="deck19"><label for="deck19" id="labeldeck19">Heavy cannon x4</label><br /></span>
+						<span id="spandeck20"><input type="checkbox" name="deck" value="20" id="deck20"><label for="deck20" id="labeldeck20">Overwhelmingly Large Cannon x4</label><br /></span>
+						<span id="spandeck21"><input type="checkbox" name="deck" value="21" id="deck21"><label for="deck21" id="labeldeck21">Bladewing Rigging</label><br /></span>
+						<span id="spandeck22"><input type="checkbox" name="deck" value="22" id="deck22"><label for="deck22" id="labeldeck22">Fineglow Lanterns</label><br /></span>
+					</form>
+				</td>
+				<td style="text-align: left;">
+					<form name="hullsform" style="margin-top: 2px;">
+						<span id="spanhull0"><input type="checkbox" name="hull" value="0" id="hull0"><label for="hull0" id="labelhull0">Barnacled hull</label><br /></span>
+						<span id="spanhull1"><input type="checkbox" name="hull" value="1" id="hull1"><label for="hull1" id="labelhull1">Reinforced hull</label><br /></span>
+						<span id="spanhull2"><input type="checkbox" name="hull" value="2" id="hull2"><label for="hull2" id="labelhull2">Sleek hull</label><br /></span>
+						<span id="spanhull3"><input type="checkbox" name="hull" value="3" id="hull3"><label for="hull3" id="labelhull3">Battle hull</label><br /></span>
+						<span id="spanhull4"><input type="checkbox" name="hull" value="4" id="hull4"><label for="hull4" id="labelhull4">Golden hull</label><br /></span>
+						<span id="spanhull5"><input type="checkbox" name="hull" value="5" id="hull5"><label for="hull5" id="labelhull5">Hull of Tides</label><br /></span>
+						<span id="spanhull6"><input type="checkbox" name="hull" value="6" id="hull6"><label for="hull6" id="labelhull6">Armoured hull</label><br /></span>
+						<span id="spanhull7"><input type="checkbox" name="hull" value="7" id="hull7"><label for="hull7" id="labelhull7">Hull of Storms</label><br /></span>
+						<span id="spanhull8"><input type="checkbox" name="hull" value="8" id="hull8"><label for="hull8" id="labelhull8">War Hull</label><br /></span>
+						<span id="spanhull9"><input type="checkbox" name="hull" value="9" id="hull9"><label for="hull9" id="labelhull9">Hull of Glory</label><br /></span>
+						<span id="spanhull10"><input type="checkbox" name="hull" value="10" id="hull10"><label for="hull10" id="labelhull10">Storm rider hull</label><br /></span>
+						<span id="spanhull11"><input type="checkbox" name="hull" value="11" id="hull11"><label for="hull11" id="labelhull11">Golden katana hull</label><br /></span>
+						<span id="spanhull12"><input type="checkbox" name="hull" value="12" id="hull12"><label for="hull12" id="labelhull12">Blazing lantern hull</label><br /></span>
+						<span id="spanhull13"><input type="checkbox" name="hull" value="13" id="hull13"><label for="hull13" id="labelhull13">Blackwater hull</label><br /></span>
+						<span id="spanhull14"><input type="checkbox" name="hull" value="14" id="hull14"><label for="hull14" id="labelhull14">Shimmering azure hull</label><br /></span>
+					</form>
+				</td>
+			</tr>
+		</table>
+		<h4>The calculator will show the selected Captain, Crew and Ship upgrades with a yellow background colour, or a reddish background color if the captain or crew member was forced to be selected. If a deck upgrade needs to be selected twice, it will have an green background color.<br>
+
+			<strong style="color: red;"> Note: </strong>When using more than one of either a First Mate, Eastern Overseer, Bureaucrat, Judge of Dice or Kharidian Exile, then make sure to place the best of those four crew members at the left side of your crew for the best results.</h4>
+	</div>
+
+	
+	<div class="right">
+		
+		<div id="crew"></div>
+		<script type="text/javascript">printCrewForm();</script>
+		<br />
+		
+	</div>
+
+
+	<div class="footer">
+		<div class="ship-info">
+			<h2>Arc (Exploration Focus)</h2>
+			<h3>Crew</h3>
+			<p>Focus on collecting free crew whenever possible.</p>
+			<p>Slowly move your existing crew towards the ideal setup discussed previously.</p>
+			<h3>Upgrades</h3>
+			<p>Recommended Buying Priority:</p>
+			<ul class="upgrade-list">
+				<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="arc-list-toggle" data-target-list="arc-list"/><label for="arc-list-toggle"></label></li><br>
+				<li><input type="checkbox" name="arc-list" id=" arc-list1"><strong>Sturdy Rudder:</strong> Speeds up voyages</li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list2"><strong>Refitted Office:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list3"><strong>Small Crate of Food:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list4"><strong>Single Cannon:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list5"><strong>Sturdy Rigging:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list6"><strong>Reinforced Hull:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list7"><strong>Polished Figurehead (Optional):</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list8"><strong>Sturdy Ram (Situational):</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list9"><strong>Large Crate of Food:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list10"><strong>Sleek Hull (Consider Later):</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list11"><strong>Refitted Warehouse:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list12"><strong>Refitted Shipwright:</strong></li>
+				<li><input type="checkbox" name="arc-list" id=" arc-list13"><strong>Refitted Bar (Consider Later):</strong></li>
+			</ul>
+		</div>
+
+		<div class="ship-info">
+			<h2>Skull (Combat Focus)</h2>
+			<h3>Crew</h3>
+			<p>Complete scroll voyages as soon as possible.</p>
+			<p>Set your scroll destination in the Ports interface for efficient voyages.</p>
+			<h3>Upgrades</h3>
+			<p>Recommended Buying Priority:</p>
+			<ul class="upgrade-list">
+				<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="skull-list-toggle" data-target-list="skull-list"/><label for="skull-list-toggle"></label></li><br>
+				<li><input type="checkbox" name="skull-list" id="skull-list1"><strong>Polished Rudder:</strong>Speeds up voyages</li>
+				<li><input type="checkbox" name="skull-list" id="skull-list2"><strong>Entwined Rigging:</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list3"><strong>Small Crate of Riches:</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list4"><strong>Canons (x2):</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list5"><strong>Golden Hull:</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list6"><strong>Enchanted Figurehead (Optional):</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list7"><strong>Reinforced Ram:</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list8"><strong>Battle Hull:</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list9"><strong>Renovated Shipwright:</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list10"><strong>Refitted Lodgings:</strong></li>
+				<li><input type="checkbox" name="skull-list" id="skull-list11"><strong>Renovated Warehouse:</strong></li>
+			</ul>
+		</div>
+
+		<div class="ship-info">
+			<h2>Hook (Trading Focus)</h2>
+			<h3>Crew</h3>
+			<p>With the new office, expand your crew setup from two merchants to three and ensure a merchant on every applicable mission.</p>
+			<h3>Upgrades</h3>
+			<p>Recommended Buying Priority:</p>
+			<ul class="upgrade-list">
+				<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="hook-list-toggle" data-target-list="hook-list"/><label for="hook-list-toggle"></label></li><br>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list1"><strong>Gilded Rudder:</strong>Speeds up voyages</li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list2"><strong>Heavy Cannons (x2):</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list3"><strong>Oxskin Rigging:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list4"><strong>Large Crate of Riches:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list5"><strong>Hull of Tides:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list6"><strong>Armoured Hull:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list7"><strong>Renovated Office:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list8"><strong>Skeletal Figurehead (Optional):</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list9"><strong>Armoured Ram:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list10"><strong>Renovated Bar (Consider Later):</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list11"><strong>Renovated Lodgings:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list12"><strong>Refurbished Warehouse:</strong></li>
+			  <li><input type="checkbox"  name="hook-list" id="hook-list13"><strong>Refitted Workshop:</strong></li>
+			</ul>
+		  </div>
+		
+		  <div class="ship-info">
+			<h2>Scythe (Crew Training Focus)</h2>
+			<h3>Crew</h3>
+			<p>New crew members require training before mainline service. Utilize your three ships strategically.</p>
+			<p>Use Port Focus settings to gather resources and train crew on safer voyages.</p>
+			<p>After finishing priority upgrades, you need to save up as much cherrywood as possible, to be used along with jade once you reach Bowl region<p>
+			</p>for very important upgrades including the Refurbished office and totem hotspot upgrades which will all be used through endgame.</p>
+			<h3>Upgrades</h3>
+			<p>Recommended Buying Priority:</p>
+			<ul class="upgrade-list">
+				<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="scythe-list-toggle" data-target-list="scythe-list"/><label for="scythe-list-toggle"></label></li><br>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list1"><strong>Enchanted Rudder:</strong>Speeds up voyages</li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list2"><strong>Eastern Artefacts:</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list3"><strong>Cannons (x3):</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list4"><strong>Ornate Rigging:</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list5"><strong>War Hull:</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list6"><strong>Hull of Storms:</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list7"><strong>Ghostly Figurehead (Optional):</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list8"><strong>Battle Ram:</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list9"><strong>Nautical Shipwright:</strong></li>
+			  <li><input type="checkbox"  name="scythe-list" id="scythe-list10"><strong>Refurbished Bar (Consider Later):</strong></li>
+			  <ul>
+			  </div>
+		
+		  <div class="ship-info">
+				<h2>Bowl (Crew Training and Leveling)</h2>
+				<h3>Crew</h3>
+				<p>New crew members require training before mainline service. Utilize your three ships strategically.</p>
+				<p>Use Port Focus settings to gather resources and train crew on safer voyages.</p>
+				<p>A voyage to the Scythe with an experience-boosting unit can raise a level 0 unit to level 2, and a second voyage to level 3.</p>
+				
+				<p>With the new office, you can expand your crew setup from three merchants to four, and ensure to bring a merchant on every applicable mission.</p>
+				<p>Obtain three to four Judges of Dice (JOD), as these will be used until the final (Shield) region.</p>
+				<h3>Upgrades</h3>
+				<p>Recommended Buying Priority:</p>
+				<ul class="upgrade-list">
+					<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="bowl-list-toggle" data-target-list="bowl-list"/><label for="bowl-list-toggle"></label></li><br>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list1"><strong>Skeletal Rudder:</strong>Speeds up voyages</li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list2"><strong>Hull of Glory:</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list3"><strong>Eastern Treasures:</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list4"><strong>Cannons (x4):</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list5"><strong>Whaleskin Rigging:</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list6"><strong>Refurbished Office:</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list7"><strong>Storm Rider Hull:</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list8"><strong>War Ram:</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list9"><strong>Intrepid Figurehead (Optional):</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list10"><strong>Luxurious Bar (Consider Later):</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list11"><strong>Pristine Warehouse:</strong></li>
+				  <li><input type="checkbox"  name="bowl-list" id="bowl-list12"><strong>Renovated Workshop:</strong></li>
+				</ul>
+			</div>
+		
+			<div class="ship-info">
+			  <h2>Pincers (Combat Focus)</h2>
+			  <h3>Upgrades</h3>
+			  <p>Recommended Buying Priority:</p>
+			  <ul class="upgrade-list">
+				<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="Pincers-list-toggle" data-target-list="Pincers-list"/><label for="Pincers-list-toggle"></label></li><br>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list1"><strong>Rudder That Parts the Seas:</strong>Speeds up voyages</li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list2"><strong>Heavy Cannons (x4):</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list3"><strong>Dragonskin Rigging:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list4"><strong>Eastern Relics:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list5"><strong>Golden Katana Hull:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list6"><strong>Blazing Lantern Hull:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list7"><strong>Spitfire Cannon:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list8"><strong>Inspiring Figurehead (Optional):</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list9"><strong>Luxurious Shipwright:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list10"><strong>Luxurious Lodgings:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list11"><strong>Imperial Warehouse:</strong></li>
+				<li><input type="checkbox"  name="Pincers-list" id="Pincers-list12"><strong>Refurbished Workshop:</strong></li>
+			  </ul>
+			</div>
+		  
+			<div class="ship-info">
+			  <h2>Loop (Distance Focus)</h2>
+			  <h3>Notes</h3>
+			  <p>The Loop is the longest region to unlock the next upgrade, and has low resource rewards per mission. Focus on rushing distance while protecting your crew with lifeboats.</p>
+			  <p>Terracotta Merchants offer a small improvement and are a low priority buy. Purchase them near the end of the region for some leveling before The Shield.</p>
+			  <h3>Upgrades</h3>
+			  <p>Recommended Buying Priority:</p>
+			  <ul class="upgrade-list">
+				<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="Loop-list-toggle" data-target-list="Loop-list"/><label for="Loop-list-toggle"></label></li><br>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list1"><strong>Mist-Dancing Rudder:</strong>Speeds up voyages</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list2"><strong>Morale, Combat, Seafaring (MCS):</strong> Crew buffs (prioritize as needed).</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list3"><strong>Wisp:</strong> Crew member for specific benefits.</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list4"><strong>2 x MCS:</strong> Additional crew buffs.</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list5"><strong>Overwhelmingly Large Cannons (x4):</strong></li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list6"><strong>TCM:</strong>Terracotta Merchant.(low priority).</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list7"><strong>MCS:</strong> Additional crew buff.</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list8"><strong>TCM:</strong>Terracotta Merchant.</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list9"><strong>Blackwater Hull:</strong></li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list11"><strong>Figurehead of the Spires:</strong></li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list12"><strong>2 x MCS:</strong> More crew buffs.</li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list13"><strong>Opulent Bar:</strong></li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list14"><strong>Dynastic Warehouse:</strong></li>
+				<li><input type="checkbox"  name="Loop-list" id="Loop-list15"><strong>2 x TCM:</strong></li>
+			  </ul>
+			  <h3>Final Ideal Loop Crew</h3>
+			  <p>6 Morale/Combat, 5 Seafaring, 4 TCM, 3 JOD (Judges of Dice), 1 Wisp.</p>
+			</div>
+		
+			<div class="ship-info">
+			  <h2>Shield (Endgame Focus)</h2>
+			  <h3>Notes</h3>
+			  <p>Shield is the final region. While there's no further region to unlock, some upgrades require reaching the maximum distance of 6,000,000.</p>
+			  <p>After acquiring all Shield buyables, consider returning to Scythe and Bowl for resources to manipulate rewards with totems.</p>
+			  <h3>Upgrades</h3>
+			  <p>Recommended Buying Priority:</p>
+			  <ul class="upgrade-list">
+				<li>Click to select all <input type="checkbox" class="toggle-checkbox" id="Shield-list-toggle" data-target-list="Shield-list"/><label for="Shield-list-toggle"></label></li><br>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list1"><strong>Tengu Rudder:</strong>Speeds up voyages</li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list2"><strong>MCS:</strong>(prioritize as needed).</li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list3"><strong>Exile:</strong> Crew member for specific benefits.</li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list4"><strong>MCS:</strong>(prioritize as needed)</li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list5"><strong>Exile:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list6"><strong>Bladewing Rigging:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list7"><strong>Fineglow Lanterns:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list8"><strong>MCS:</strong>(prioritize as needed).</li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list9"><strong>Exile:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list10"><strong>Shimmering Azure Hull:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list11"><strong>Ram of the Bladewing:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list12"><strong>3 x MCS:</strong>(prioritize as needed)</li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list13"><strong>Sovereign Warehouse:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list14"><strong>Maritime Shipwright:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list15"><strong>Ostentatious Bar:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list16"><strong>Mariner Lodgings:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list17"><strong>Revamped Workshop:</strong></li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list18"><strong>Totems as needed:</strong> Strategic upgrades for specific situations.</li>
+				<li><input type="checkbox"  name="Shield-list" id="Shield-list19"><strong>Legendary Portal:</strong> Endgame purchase.</li>
+			  </ul>
+			  <h1>Optimal Endgame Crew</h1>
+			  <p>Optimal endgame captains are 2 Morale, 1 Combat, and 2 Seafaring captains (each with 4 appropriate +1% traits).</p>
+			  <p>For maximum resources and trade goods: <strong>6 MCS, 4 TCM, 3 Exiles</strong></p>
+			  <p>For a more balanced approach, adjust crew based on your playstyle and needs.</p>
+			</div>
+		</div>
+	</div>
+
+</div>
+</body>
+</html>

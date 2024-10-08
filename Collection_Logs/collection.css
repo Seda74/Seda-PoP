@@ -1,0 +1,91 @@
+/* Style the side navigation */
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #4e2f40;
+    overflow-x: hidden;
+  }
+  
+  
+  /* Side navigation links */
+  .sidenav a {
+    color: white;
+    padding: 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color on hover */
+  .sidenav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Style the tab */
+.bosstab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #4656e7;
+  padding-left: 200px;
+}
+
+/* Style the buttons inside the tab */
+.bosstab button {
+  background-color: #5940d6;
+  color: aqua;
+  float: left;
+  border: solid;
+  border-radius: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.bosstab button:hover {
+  background-color: #b43636;
+}
+
+/* Create an active/current tablink class */
+.bosstab button.active {
+  background-color: #18a023;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding-left: 200px;
+  padding-top: 5px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+/* Style the subtab buttons */
+.subtab {
+  background-color: #5940d6;
+  color: aqua;
+  float: left;
+  border: solid;
+  border-radius: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Style the active subtab buttons */
+.subtab.active {
+  background-color: #8b2675; /* Change this to your desired color */
+}
+
+/* Style the highlight on button */
+.highlighted {
+  background-color: rgb(37, 207, 65);
+}

@@ -1,0 +1,11 @@
+.effect-bonus { width:45px; }
+.target-number { width:60px; text-align: right; }
+.pop-number { width:37px; text-align:right; }
+.pop-bottom1 { margin-bottom:1px; }
+.inline { display: inline !important; vertical-align: bottom; }
+.clickable { cursor: pointer; }
+.selecteditem { background-color: #e4e710; }
+.selecteditemdouble { background-color: #26c018; }
+.forceditem{ background-color: #d47052; }
+.crew-image { cursor: move; margin-top: 1px; }
+.captain-image { cursor: move; }

@@ -1,0 +1,99 @@
+/* The grid container */
+.grid-container {
+  display: grid;
+  grid-template-columns:200px 1fr 925px;  /* set columns widths */
+  grid-template-areas: 
+    'header header header'
+    'sidenav content right' 
+    'footer footer footer';
+  grid-column-gap: 5px; /*- if you want gap between the columns */
+  background-color: #111111;
+} 
+
+.sidenav,
+.content,
+.right {
+  padding: 10px;
+}
+
+/* Style the header */
+.header {
+  grid-area: header;  
+  background-image: url("/Images/runescape.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #ca2c6e;
+  padding: 175px;
+  text-align: center;
+  font-size: 35px;
+}
+
+/* Style the side navigation */
+.sidenav {
+  grid-area: sidenav;
+  height: 100%;
+  width: auto;
+  grid-column: 1; /* Occupies first column */
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #523b3b;
+  overflow-x: hidden;
+}
+
+/* Side navigation links */
+.sidenav a {
+  color: white;
+  padding: 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color on hover */
+.sidenav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Style the content */
+.content {
+  grid-area: content; 
+  height: 100%;
+  width: auto;
+  grid-column: 2; /* Occupies second column */
+  background-color: #8984b6;
+  
+}
+
+/* Style the right column */
+.right {
+  grid-area: right;
+  height: 770px;
+  width: auto;
+  grid-column: 3; /* Occupies third column */
+  background-color: #648030;
+}
+
+/* Style the footer */
+.footer {
+  grid-area: footer;
+  background-color: #724545;
+  padding: 30px;
+  text-align: center;
+}
+
+.upgrade-list li {
+  list-style: none;  /* Removes the default bullet point */
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media (max-width: 600px) {
+  .grid-container  {
+    grid-template-areas: 
+      'header' 
+      'sidenav' 
+      'content' 
+      'right' 
+      'footer';
+  }
+}
