@@ -23,58 +23,36 @@ Blamish oil	25	Used to make oily fishing rods during the Heroes' Quest.	Harralan
 
 // Function to process the raw data into a structured object
 function processData(data) {
-    const lines = data.split('\n').slice(1); // Remove header and split into lines
-    const potions = {};
-  
-    lines.forEach(line => {
+  const lines = data.split('\n').slice(1); // Remove header and split into lines
+  const potions = {};
+
+  lines.forEach(line => {
       const parts = line.split('\t');
       if (parts.length < 3) return; // Skip lines with insufficient data
-  
+
       const name = parts[0];
       const level = parts[1];
       const effect = parts[2];
       const ingredients = [];
-  
-      // Extract ingredients - combine name and quantity
-      for (let i = 3; i < parts.length; i++) {
-        if (parts[i] && parts[i] !== "Notes") {
-          ingredients.push(`${parts[i]}:${parts[i + 1]}`); // Combine name and quantity
-          i++; // Skip the quantity column
-        }
+
+      // Extract ingredients
+      for (let i = 3; i < parts.length; i += 2) {
+          if (parts[i] && parts[i] !== "Notes") {
+              ingredients.push(parts[i]);
+          }
       }
-  
+
       potions[name] = {
-        level: parseInt(level),
-        effect: effect,
-        ingredients: ingredients
+          level: parseInt(level),
+          effect: effect,
+          ingredients: ingredients
       };
-    });
-  
-    return potions;
-  }
-  
-  // Process the data
-  const potionsData = processData(rawData);
-  
-  // Convert to HTML-compatible format
-  const htmlData = {};
-  for (const potionName in potionsData) {
-    const potion = potionsData[potionName];
-    htmlData[potionName] = {
-      level: potion.level,
-      effect: potion.effect,
-      ingredients: potion.ingredients.map(ingredient => {
-        const [name, quantity] = ingredient.split(':');
-        return {
-          name: name,
-          quantity: quantity || undefined
-        };
-      })
-    };
-  }
-  
-  // Convert to JSON string
-  const jsonData = JSON.stringify(htmlData, null, 2);
-  
-  // Output the JSON string
-  console.log(jsonData);
+  });
+
+  return potions;
+}
+
+// Process the data
+const potionsData = processData(rawData);
+
+console.log(JSON.stringify(potionsData, null, 2));
